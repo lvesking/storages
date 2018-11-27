@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>修改密码</title>
+		<link rel="stylesheet" href="js/css/bootstrap.min.css" />
+		<script type="text/javascript" src="js/JQ/jquery-3.1.1.min.js" ></script>
+		<script type="text/javascript" src="js/js/bootstrap.min.js" ></script>
+		<link rel="stylesheet" href="css/updatePwd.css" />
+	</head>
+	<body>
+		<div class="container">
+	        <div class="form row col-md-offset-4">
+	            <div class="form-horizontal col-md-offset-3" id="login_form">
+	                <h3 class="form-title">UPDATE</h3>
+	                <div class="col-md-9">
+	                	<div class="form-group">
+	                        <i class="fa fa-lock fa-lg glyphicon glyphicon-user"  ></i>
+	                        <input class="form-control required" type="password" placeholder="旧密码" id="old_pwd" maxlength="20"/>
+	                    </div>
+	                    <div class="form-group">
+	                        <i class="fa fa-user fa-lg glyphicon glyphicon-lock"></i>
+	                        <input class="form-control required" type="password" placeholder="新密码" id="new_pwd"  maxlength="20"/>
+	                   		<span id="showResult"></span>
+	                    </div>
+	                    <div class="form-group">
+	                        <i class="fa fa-lock fa-lg glyphicon glyphicon-lock"  ></i>
+	                        <input class="form-control required " type="password" placeholder="确认密码" id="confirm_pwd"  maxlength="20"/>
+	                        <span id="showConfirmResult"></span>
+	                    </div>
+	                    <div class="form-group col-md-offset-9">
+	                        <button type="submit" id="affirm" class="btn btn-success pull-right" name="submit">确认</button>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <script>
+	    	$("#new_pwd").on("blur",function(){//新密码的失去焦点事件
+	    		if($("#new_pwd").val().length<6){
+	    			$("#showResult").html("新密码不能少于6个字符");
+		            $("#showResult").css("color","red");
+	    			return;
+	    		}
+	    	})
+	    	$("#new_pwd").on("focus",function(){//新密码的焦点事件
+	    		$("#showResult").html("");
+	    		$("#showConfirmResult").html("");
+	    			return;
+	    	})
+	    	$("#confirm_pwd").on("focus",function(){//确认密码的焦点事件
+	    		$("#showConfirmResult").html("");
+	    			return;
+	    	})
+	    	
+	    	$("#affirm").on("click",function(){//确认修改点击事件
+	    		if($("#showResult").html().length>0){//如果span存在警告不能登录
+	    			return;
+	    		}
+	    		let new_pwd=$("#new_pwd").val();
+	    		let confirm_pwd=$("#confirm_pwd").val();
+	    		if(new_pwd!=confirm_pwd){//判断新密码和确认密码是否相等
+	    			$("#showConfirmResult").html("两次密码输入不一致");
+	    			$("#showConfirmResult").css("color","red");
+	    			return;
+	    		}
+	    		$.ajax({//异步提交数据
+	    			url:"/login/api/IPAddress/RegUser",
+	    			data:{
+	    				Remark:$("#old_pwd").val(),
+	    				Opt:"U",
+	    				Password:$("#new_pwd").val()
+	    			},
+	    			type:"",
+	    			dataType:"json",
+	    			success:function(obj){
+	    				
+	    			},
+	    			error:function(e){
+	    				
+	    			}
+	    		})
+	    		
+	    	})
+	    </script>
+	</body>
+</html>

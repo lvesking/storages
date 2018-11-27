@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>登录</title>
+		<link href="js/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="js/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/login_footer.css" />
+		<style>
+			body{
+				margin: 0;
+				padding: 0;
+			    background:url(img/login1.jpg)  no-repeat;
+			    background-size:cover;
+			    background-attachment:fixed;
+			    background-color:#CCCCCC;
+			}
+			@keyframes myfirst{
+				    0%   {background:url("../img/1.jpg");}
+				    34%  {background:url("../img/2.jpg");}
+				    67%  {background:url("../img/3.jpg");}
+				    100% {background:url("../img/1.jpg");}
+			}
+			.form{
+				background: rgba(255,255,255,0.2);
+				width:400px;
+				margin:120px auto;
+			}
+			/*阴影*/
+			.fa{
+				display: inline-block;
+				top: 27px;
+				color: #ccc;
+			}
+			input[type="text"],input[type="password"]{
+				padding-left:26px;
+			}
+			.checkbox{
+				padding-left:21px; 
+			}
+
+			option{
+				margin-left: 12px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+	        <div class="form row col-md-offset-4">
+	            <div class="form-horizontal col-md-offset-3" id="login_form">
+	                <h3 class="form-title">LOGIN</h3>
+	                <div class="col-md-9">
+	                	<div class="form-group">
+	                        <i class="fa fa-lock fa-lg glyphicon glyphicon-arrow-down"  ></i>
+	                        <select  class="form-control required" autofocus="autofocus">
+	                        	<option value="区域选择">区域选择</option>
+	                        	<option value="南昌">南昌</option>
+	                        	<option value="深圳">深圳</option>
+	                        </select>
+	                    </div>
+	                    <div class="form-group">
+	                        <i class="fa fa-user fa-lg glyphicon glyphicon-user"></i>
+	                        <input class="form-control required" type="text" placeholder="用户ID" id="username" name="username" autofocus="autofocus" maxlength="20"/>
+	                   		<span id="showResult"></span>
+	                    </div>
+	                    <div class="form-group">
+	                         <i class="fa fa-lock fa-lg glyphicon glyphicon-lock"  ></i>
+	                         <input class="form-control required " type="password" placeholder="Password" id="password" name="password" maxlength="8"/>
+	                    </div>
+	                    <div class="form-group">
+	                        <label class="checkbox">
+	                            <input type="checkbox" name="remember" id="ck_rmbUser" value="0"/>记住我
+	                        </label>
+	                    </div>
+	                    <div class="form-group col-md-offset-9">
+	                        <button type="submit" class="btn btn-success pull-right" name="submit">登录</button>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="navbar-text">
+		    <p>
+		    	   联系电话：+86 0755-82227356 转 系统部(章工)
+		    </p>
+		    <p>
+		    	Copyright©® 江西省吉禾供应链管理有限公司 All Rights Reserved
+		    </p>
+	    </div>
+		<script type="text/javascript" src="js/JQ/jquery-3.1.1.min.js" ></script>
+		<script type="text/javascript" src="js/js/bootstrap.min.js" ></script>
+		<script type="text/javascript" src="js/jquery.cookie.js" ></script>
+		<script>
+			$("#username").blur(function(){//用户名焦点事件
+		        let data = $("#username").val();//获取用户名的值
+		        if (data == null || data == "") {
+		            $("#showResult").text("用户名不能为空！");
+		            $("#showResult").css("color","red");
+		            return false;
+		        }
+   			 });
+   			 $("#username").on("focus",function(){//用户焦点事件
+	    		$("#showResult").html("");
+	    			return;
+	    	})
+   			 
+   			 
+   			$(".btn").on("click",function(){//登录事件
+   				$.ajax({//ajax数据后台交互
+   					type:"post",
+   					url:"http://192.168.0.90/api/IPAddress/LogSys",
+   					async:true,
+   					data:{
+   						UserID:$("#username").val(),
+						Password:$("#password").val(),
+						Remark:"Remark"
+   					},
+   					dataType:"json",
+   					success:function(obj){
+   						if(obj.RetMsg=="操作成功"){//成功
+   								Save(); //保存账号密码到cookie7天
+								location.href="http://192.168.0.90/login/storage/index.html";
+							}else{//失败
+								$("#showResult").text("用户名或密码错误！");	
+		            			$("#showResult").css("color","red");
+							}
+   					}
+   				});
+   			})
+   			 
+   			 
+			     $(document).ready(function () {
+			        if ($.cookie("rmbUser") == "true") {
+			            $("#ck_rmbUser").attr("checked", true);
+			            $("#username").val($.cookie("username"));
+			            $("#password").val($.cookie("password"));
+			        }
+   				 });
+   			 
+   			  
+   			  //记住用户名密码
+				     function Save() {
+    		//判断复选框是否被选中
+					        if ($("#ck_rmbUser").prop("checked")) {
+					            var str_username = $("#username").val();
+					            console.log(str_username);
+					            var str_password = $("#password").val();
+					            $.cookie("rmbUser", "true", { expires: 7 }); //存储一个带7天期限的cookie
+					            $.cookie("username", str_username, { expires: 7 });
+					            $.cookie("password", str_password, { expires: 7 });
+					        }
+					        else {
+					            $.cookie("rmbUser", "false", { expire: -1 });
+					            $.cookie("username", "", { expires: -1 });
+					            $.cookie("password", "", { expires: -1 });
+					        }
+					    };
+		</script>
+	</body>
+</html>

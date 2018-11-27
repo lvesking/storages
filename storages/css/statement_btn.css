@@ -1,0 +1,19 @@
+	#beginDate,#overDate{
+				background:url(../img/calendar.png) no-repeat right;
+				border: none;
+			}
+			td:hover{
+				color: blue;
+				cursor: pointer;
+			}
+			#select{
+				background: blue;
+				color: #FFFFFF;
+				border:none;
+			}
+			#export,#goBack{
+				background: #008000;
+				border:none;
+				color: #FFFFFF;
+			}
+			

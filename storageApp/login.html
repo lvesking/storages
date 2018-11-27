@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    <style>
+    	.mui-content{
+    		margin-top: 2.5em;
+    	}
+    	.mui-input-group .mui-input-row {
+    		height: 3em;
+    	}
+    	.mui-input-row label,.mui-input-row input {
+    		line-height: 1.5;
+    		font-size: 1.2em;
+    	}
+    	.mui-input-row input{
+    		height: 2.5em;
+    	}
+    	.mui-content-padded{
+    		margin-top: 2em;
+    	}
+    	.link-area{
+    		line-height: 3em;
+    	}
+		.code {
+			font-family: Arial;
+			font-style: italic;
+			font-weight: bold;
+			border: 0;
+			letter-spacing: 8px;
+			color: blue;
+		}
+		.mui-bottom{
+			height: 3em;
+			padding-top: 10px;
+		}
+		.mui-bar-footer{
+			margin-top: 5%;
+			text-align: center;
+			letter-spacing: 0.1em;
+		}
+		.mui-input-row select {
+			height: 48px;
+		}
+		.mui-bar h1{
+			letter-spacing: 0.5em;
+			font-family: "微软雅黑";
+			font-size: 1.3em;
+			color: #00000;
+		}
+		.alert{
+			float: right;
+			position: relative;
+			bottom: 2.1em;
+			right: 1em;
+		}
+    </style>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+	    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	    <h1 class="mui-title" id="selectHe">登录</h1>
+	   <!-- <button type="button" class="mui-btn mui-btn-nav regbtn">注册</button>-->
+	</header>
+	<div class="mui-content">
+	    <form id='login-form' class="mui-input-group">
+			<div class="mui-input-row">
+				<label>账号</label>
+				<input id='account' type="text" class="mui-input-clear mui-input" placeholder="默认供应商编号">
+			</div>
+			<div class="mui-input-row">
+				<label>密码</label>
+				<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入登录密码">
+			</div>
+			<div class="mui-input-row">
+				<label id="checkcode">验证码</label>
+				<input type="text" placeholder="请输入验证码" id="input"/>
+			</div>
+			<div  class="mui-bottom">
+				<input type="button" id="checkCode" class="code" onclick="createCode()" />
+				<a href="#" id="barter" onclick="createCode()">看不清楚</a><br>
+			</div>
+			<div class="alert">
+				<p><a href="forget_password.html">修改密码</a></p>
+			</div>
+		</form>
+		<div class="caution">
+			<p></p>
+		</div>
+		<div class="mui-content-padded">
+			<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+			<!--<div class="link-area"><a id='reg' href="reg.html">免费注册</a> <span class="spliter">|</span> -->
+				<!--<a id='forgetPassword'>忘记密码</a>-->
+			</div>
+		</div>
+	</div>
+		<div class="mui-bar-footer">
+			 <p>
+		    	联系电话：+86 0791-83808089 转 系统部(章工)
+		    </p>
+		    <p>
+		    	Copyright©® 江西省吉禾供应链管理有限公司 All Rights Reserved
+		    </p>
+		</div>
+	
+	<script type="text/javascript" src="JQ/jquery-3.1.1.min.js" ></script>
+	<script type="text/javascript" src="js/checkCode.js" ></script>
+	<script>
+		//禁止f12
+	/*	document.onkeydown=function (e){
+		   var currKey=0,evt=e||window.event;
+		    currKey=evt.keyCode||evt.which||evt.charCode;
+		    if (currKey == 123) {
+		        window.event.cancelBubble = true;
+		        window.event.returnValue = false;
+		    }
+		}*/
+		/** 屏蔽鼠标右键 */  
+	/*	document.oncontextmenu = function(){return false;}  
+		//或者  
+		document.onmousedown = function(event){  
+		    event = window.event || event;  
+		    if(document.all && event.button == 2) {  
+		        event.returnvalue=false;  
+		    }  
+		} */
+		var store={
+				set:function(key,value){
+					 var curTime = new Date().getTime();
+       				 //存储值和时间
+       				 localStorage.setItem(key,JSON.stringify({data:value,time:curTime}));
+					},
+				}
+		
+		$("#login").on("tap",function(){
+			var userID=$("#account").val();
+			var passWord=$("#password").val();
+			$.ajax({
+				type:"post",
+				url:"/WEBAPI/GateWay/Login",
+				async:true,
+				data:{
+					userID:userID,
+					passWord:passWord,
+					cipherText: "Qjk5NkE5OTEwOTQxMzcwQw==",
+				},
+				success:function(obj){
+					if(obj.success==0){
+						localStorage.removeItem("particulars");
+						localStorage.clear();
+						store.set("userID",userID);
+						store.set("VendorCode",obj.msg);
+						validate();
+					}else{
+						caution("账号或密码不正确");
+					}
+				}
+			});
+		})
+			function caution(alert){
+				$(".caution p").html(alert);
+				$(".caution p").css("color","red");
+			}
+	</script>
+</body>
+</html>

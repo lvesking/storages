@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>台账</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			.mui-bar{
+				background: #87CEEB;
+			}
+			.mui-bar h1{
+				letter-spacing: 0.3rem;
+				font-family: "微软雅黑";
+				font-size: 1.3rem;
+				color: #FFFFFF;
+			}
+			.d_ledger{
+				background: #FFFFFF;
+				border-bottom: 5px solid #EEEEEE;
+				height: 19rem;
+				padding-top: 1em;
+			}
+			.i_item p{
+				width: 50%;
+			}
+			.i_item_1 p{
+				width: 100%;
+			}
+			.i_item_2 p:nth-child(1){
+				width: 37%;
+			}
+			.i_item_2 p:nth-child(2){
+				width: 30%;
+			}
+			.i_item_2 p:nth-child(3){
+				width: 33%;
+			}
+			
+			.d_ledger div p span{
+				color: #000000;
+			}
+				html,
+			body {
+				background-color: #efeff4;
+			}
+			span.mui-icon {
+				font-size: 14px;
+				color: #007aff;
+				margin-left: -15px;
+				padding-right: 10px;
+			}
+			.mui-off-canvas-right {
+				color: #fff;
+			}
+			.title {
+				margin: 35px 15px 10px;
+			}
+			.title+.content {
+				margin: 10px 15px 35px;
+				color: #bbb;
+				text-indent: 1em;
+				font-size: 14px;
+				line-height: 24px;
+			}
+			input {
+				color: #000;
+			}
+			.mui-select{
+				width:90%;
+				font-size: 1.3em;
+				font-family: "微软雅黑";
+				color: #000000;
+			}
+			.mui-search input{
+				background: #F0F0F0;
+				width: 90%;
+			}
+			#offCanvasHide{
+				margin-top: 100%;
+			}
+			.search_btn{
+				text-align: center;
+			}
+			#beginDate{
+				width: 90%;
+			}
+			.mui-number{
+				font-size: 0.8em;
+				letter-spacing: 0px;
+				color: #FFFFFF;
+				float: right;
+				margin-right: 2em;
+				margin-top: 1em;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		
+		<!--侧滑菜单容器-->
+		<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable">
+			<!--菜单部分-->
+			<aside id="offCanvasSide" class="mui-off-canvas-right">
+				<div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="title">库存查询</div>
+						<div class="content">
+							<div class="select">
+								<select class="mui-select">
+									<option value="ehubnc">南昌工厂</option>
+									<option value="ehubdct">DCT工厂</option>
+									<option value="ehubgz" selected="selected">赣州工厂</option>
+									<option disabled="disabled">中储RDC</option>
+									<option disabled="disabled">总部RDC</option>
+								</select>
+							</div>
+							<div class="laydate">
+								<input type="text" placeholder="请选择日期" id="beginDate" />
+							</div>
+							<div class="mui-input-row mui-search">
+								<input type="search" class="mui-input-clear" placeholder="请输入部品番号">
+							</div>
+							<div class="search_btn">
+								 <button type="button" class="mui-btn mui-btn-primary mui-icon mui-icon-search" id="search">
+						            搜索
+						        </button>
+							<p  class="mui-bar-footer">
+								<button id="offCanvasHide" type="button" class="mui-btn mui-btn-danger mui-btn-block" style="padding: 5px 20px;">关闭菜单</button>
+							</p>
+
+						</div>
+						
+					</div>
+				</div>
+			</aside>
+			<div class="mui-inner-wrap">
+				<header class="mui-bar mui-bar-nav">
+					<a class="mui-action-back mui-icon mui-icon-back mui-pull-left"></a>
+					<a id="offCanvasBtn" href="#offCanvasSide" class="mui-icon mui-action-menu mui-icon-bars mui-pull-right"></a>
+					<h1 class="mui-title" id="selectHe">台账查询</h1><span class="mui-number"></span>
+				</header>
+					<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<div class="ledger">
+								
+							</div>
+						</div>
+					</div>
+				<div class="mui-off-canvas-backdrop"></div>
+			</div>
+		</div>
+		
+							
+		
+		
+		
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="JQ/jquery-3.1.1.min.js" ></script>
+		<script type="text/javascript" src="js/Side_nav.js" ></script>
+		<script type="text/javascript" src="laydate/laydate.js" ></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<script type="text/javascript" src="js/Ledger.js" ></script>
+		
+	</body>
+
+</html>

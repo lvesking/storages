@@ -1,0 +1,10 @@
+.navbar-text{
+	 width:100%;
+     margin:0 auto;
+}
+.navbar-text p{
+	font-size: 1.0em;
+	font-family: "微软雅黑";
+	color: #000000;
+	text-align: center; 
+}

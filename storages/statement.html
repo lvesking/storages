@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>报表查询</title>
+		<link rel="stylesheet" href="js/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/pagination.css" />
+		<link rel="stylesheet" href="css/statement_btn.css" />
+		<script type="text/javascript" src="js/JQ/jquery-3.1.1.min.js" ></script>
+		<script type="text/javascript" src="pagination/jquery.pagination.js" ></script>
+		<script type="text/javascript" src="js/js/bootstrap.min.js" ></script>
+		<script type="text/javascript" src="laydate/laydate.js" ></script>
+		<script type="text/javascript" src="jquery-table2excel/dist/jquery.table2excel.js" ></script>
+	</head>
+	<body>
+		<table class="table table-bordered" id="excel">
+			<thead>
+				<tr class="header">
+					<th>
+						<select>
+							<option>库存汇总查询</option>
+							<option>库存明细查询</option>
+							<option>台账查询</option>					
+						</select>
+					</th>
+					<th>部品号:<input type="text" placeholder="请输入部品号" id="mark"/></th>
+					<th>日期从:
+						<input type="text" placeholder="请选择日期" id="beginDate" />
+					</th>
+					<th>到:
+						<input type="text" placeholder="请选择日期" id="overDate" />
+					</th>
+					<th><button id="select">查询</button></th>
+					<th><button id="export">导出</button></th>
+					<th><button id="goBack">返回</button></th>
+				</tr>
+			</thead>
+			<tbody class="component">
+				
+			</tbody>
+			<div class="pagination">
+				
+			</div>
+		</table>
+		<script>
+			
+			laydate.render({//获取节点显示日历
+				elem:'#beginDate'
+				
+			});
+			laydate.render({//获取节点显示日历
+				elem:'#overDate'
+			});
+		</script>
+		<script>
+			$("#select").on("click",function(){//查询点击事件
+				$("td").remove();//删除所有数据
+				if($("#mark").val()==""){//如果没找到，输出并字体为红色
+					$(".component").append("<tr><td>搜索不能为空</td></tr>");
+					$(".component").css("color","red");
+					return;
+				}
+				
+			$.ajax({
+					url:"http://192.168.0.90/api/IPAddress/GetUserInfo",//ajax数据交互
+					data:"userID="+$("#mark").val(),
+					type:"get",
+					dataType:"json",
+					success:function(obj){
+						let howMary=10;//多少条一页
+						try{//条数不够会报异常
+							if(obj.length=="0"){
+								$(".component").append("<tr><td>没有找到</td></tr>");
+								return;
+							}
+							for(i=0;i<howMary;i++){//自动加载显示第一页数据
+								$(".component").append("<tr><td>"+(i+1)+"</td><td>"+obj[i].UserID+"</td><td>"+obj[i].UserName+"</td></tr>")
+							}
+							
+						}catch(e){
+							console.log(e);
+						}finally{
+							keyword();//封装的关键词变红的函数
+						}
+						$(".pagination").pagination({//页数
+									totalData:obj.length,//总数据
+									showData:howMary,//多少条一页
+									isHide:true,
+									callback:function(index){
+										try{
+											$("td").remove();//点击删除其余数据
+											if(index.getCurrent()==1){//如果是第一页遍历
+												for(let i=0;i<howMary;i++){
+													$(".component").append("<tr><td>"+(i+1)+"</td><td>"+obj[i].UserID+"</td><td>"+obj[i].UserName+"</td></tr>")
+												}
+												return;
+											}
+											let current=index.getCurrent()*howMary-howMary;//计算每页第一条数据是第多少条
+												for (let i=0;i<howMary;i++) {//遍历所有返回的数据
+													$(".component").append("<tr><td>"+(current+1)+"</td><td>"+obj[current++].UserID+"</td><td>"+obj[current-1].UserName+"</td></tr>")
+												}
+										}catch(e){
+											console.log(e);
+										}finally{
+											keyword();
+										}
+									}
+						})
+						
+					}
+				})
+			});
+		
+		
+		 	 function keyword(){
+		 		let regExp=new RegExp($("#mark").val(),"g");//获取搜索框值，g是全局
+					$(".component td").each(function(){//遍历td节点
+						let html=$(this).html();//获取td节点内容
+						let newHtml=html.replace(regExp,`<span style="color: red;">${$("#mark").val()}</span>`);//搜索框词代替查询的关键词
+						$(this).html(newHtml);//刷新
+				})
+		 	}
+		</script>
+		<script>
+			$("#export").on("click",function(){//导出点击事件，导出td内容
+				$("#excel").table2excel({
+					exclude:".header",
+					name:"Excel Document Name",
+					filename:"data.xls",
+					/*exclude_img: true,
+       				exclude_links: true,
+        			exclude_inputs: true*/
+				})
+			})
+				  
+		</script>
+		<script>
+			$("#goBack").on("click",function(){//返回事件
+				window.history.go(-1);
+			})
+		</script>
+		
+	</body>
+</html>

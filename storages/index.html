@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>功能模块</title>
+		<link rel="stylesheet" href="js/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/nav.css" />
+		<script type="text/javascript" src="js/JQ/jquery-3.1.1.min.js" ></script>
+		<script type="text/javascript" src="js/js/bootstrap.min.js" ></script>
+		<script type="text/javascript" src="js/vue.js" ></script>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			.footer{
+				text-align: center;
+				font-size: 1.0em;
+				font-family: "微软雅黑";
+				color: #FFFFFF;
+				background: green;
+			}
+			.header{
+				width: 100%;
+				height: 60px;
+				color: ##000000;
+				font-family: "微软雅黑";
+			}
+			.header>p{
+			}
+		</style>
+	</head>
+	<body>
+		<header class="navbar-text header navbar-brand navbar-default">
+			<p>江西省吉禾供应链管理有限公司</p>
+			
+		</header>
+		 <nav class="navbar-text">
+			<div id="main">
+			    <div class="nav">
+			        <div class="nav-top">
+			            <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)"><img style="width:60px;height:60px;" src="img/logo.PNG"></div>
+			        </div>
+			        <ul>
+			            <li class="nav-item" v-for="item in action">
+			                <a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>{{item.title}}</span><i class="my-icon nav-more">&gt;</i></a>
+			                <ul>
+			                    <li><a href="s"><span>123</span></a></li>
+			                </ul>
+			            </li>
+			        </ul>
+			   </div>
+			</div>
+		</nav>		
+	    <div class="navbar-text navbar-fixed-bottom footer">
+		    <p>
+		    	联系电话：+86 0755-82227356 转 系统部(章工)
+		    </p>
+		    <p>
+		    	Copyright©® 江西省吉禾供应链管理有限公司 All Rights Reserved
+		    </p>
+	    </div>
+
+	</body>
+	<script>
+/*			
+								
+						*/
+		new Vue({
+			el:"#main",
+			data:{
+					action:[//功能数据储存
+							{
+							title:"功能模块",
+							items:[{
+								modus:'报表查询',
+								address:"http://192.168.0.90/login/storage/statement.html",
+							},{
+								modus:'修改密码',
+								address:"http://192.168.0.90/login/storage/updatePwd.html",
+							},
+							]
+					},{
+						title:'退出',
+					}
+					],
+				
+			},
+			methods:{
+				
+			}
+		})
+	</script>
+		<script>
+	/*	$("#main").css({
+		    height: $(window).height() + "px"
+		})*/
+		$('.nav-item>a').on('click', function() {
+		    if (!$('.nav').hasClass('nav-mini')) {
+		        if ($(this).next().css('display') == "none") {
+		            $('.nav-item').children('ul').slideUp(300);
+		            $(this).next('ul').slideDown(300);
+		            $(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
+		        } else {
+		            $(this).next('ul').slideUp(300);
+		            $('.nav-item.nav-show').removeClass('nav-show');
+		        }
+		    }
+		});
+		$('#mini').on('click', function() {
+		    if (!$('.nav').hasClass('nav-mini')) {
+		        $('.nav-item.nav-show').removeClass('nav-show');
+		        $('.nav-item').children('ul').removeAttr('style');
+		        $('.nav').addClass('nav-mini');
+		    } else {
+		        $('.nav').removeClass('nav-mini');
+		    }
+		});
+	</script>
+</html>

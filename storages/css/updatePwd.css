@@ -1,0 +1,26 @@
+			body{
+				margin: 0;
+				padding: 0;
+			    background:url(../img/updatePwd.png)  no-repeat center center;
+			    background-size:cover;
+			    background-attachment:fixed;
+			    background-color:#CCCCCC;
+			}
+			.form{
+				background: #FFFFFF;
+				width:400px;
+				margin:120px auto;
+			}
+			/*阴影*/
+			.fa{
+				display: inline-block;
+				top: 29px;
+				position: relative;
+				color: #ccc;
+			}
+			input[type="password"]{
+				padding-left:26px;
+			}
+			.checkbox{
+				padding-left:21px; 
+			}

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>库存查询</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/data.css" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			span.mui-icon {
+				font-size: 14px;
+				color: #007aff;
+				margin-left: -15px;
+				padding-right: 10px;
+			}
+			.mui-off-canvas-right {
+				color: #fff;
+			}
+			.title {
+				margin: 35px 15px 10px;
+			}
+			.title+.content {
+				margin: 10px 15px 35px;
+				color: #bbb;
+				text-indent: 1em;
+				font-size: 14px;
+				line-height: 24px;
+			}
+			input {
+				color: #000;
+			}
+			.mui-select{
+				width:90%;
+				font-size: 1.3em;
+				font-family: "微软雅黑";
+				color: #000000;
+			}
+			.mui-search input{
+				background: #F0F0F0;
+				width: 90%;
+			}
+			#offCanvasHide{
+				margin-top: 100%;
+			}
+			.search_btn{
+				text-align: center;
+			}
+			.modalBtn{
+				display: none;
+			}
+			.modal{
+				margin-top: 50%;
+			}
+			#addressP{
+				color: #EB9316;
+				font-size: 1.8em;
+			}
+			.modal-header,.modal-footer{
+				border: none;
+			}
+			.noBtn,.yesBtn{
+				width: 5em;
+				height: 3em;
+			}
+			.boxs{
+				margin-right: 17%;
+				color: #2AC845;
+				font-size: 0.8em;
+				text-align: center;
+			}
+		</style>
+		<style>
+			#ifm{
+				position: fixed;
+				z-index: 800;
+				top: 0;
+				left: 0;
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--模态框-->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		    <div class="modal-dialog" role="document">
+		        <div class="modal-content">
+		            	<div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			                    <span aria-hidden="true">×</span>
+			                </button>
+		            	</div>
+		            <div class="modal-body">
+		            	<div>
+		            		<p id="addressP">是否查看明细</p>
+		            	</div>
+		            </div>
+		            <div class="modal-footer">
+		            	<label class="boxs"><input type="checkbox" id="checkbox" />不在提示</label>
+		            	<button type="button" class="btn btn-default noBtn" data-dismiss="modal">否</button>
+		                <button type="button" class="btn btn-default yesBtn" data-dismiss="modal">是</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<button class="modalBtn" data-toggle="modal" data-target="#myModal"></button>
+		<!--侧滑菜单容器-->
+		<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable">
+			<!--菜单部分-->
+			<aside id="offCanvasSide" class="mui-off-canvas-right">
+				<div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="title">库存查询</div>
+						<div class="content">
+							<div class="select">
+								<select class="mui-select">
+									<option value="ehubnc">南昌工厂</option>
+									<option value="ehubdct">DCT工厂</option>
+									<option value="ehubgz" selected="selected">赣州工厂</option>
+									<option disabled="disabled">中储RDC</option>
+									<option disabled="disabled">总部RDC</option>
+								</select>
+							</div>
+							<div class="select">
+								<select class="mui-select qualityName">
+									<option value="">请选择品质</option>
+									<option value="合格">合格</option>
+									<option value="不合格">不合格</option>
+									<option value="待检">待检</option>
+									<option value="封存">封存</option>
+								</select>
+							</div>
+							<div class="mui-input-row mui-search">
+								<input type="search" class="mui-input-clear" placeholder="请输入部品番号">
+							</div>
+							<div class="search_btn">
+								 <button type="button" class="mui-btn mui-btn-primary mui-icon mui-icon-search" id="search">
+						            搜索
+						        </button>
+							<p  class="mui-bar-footer">
+								<button id="offCanvasHide" type="button" class="mui-btn mui-btn-danger mui-btn-block" style="padding: 5px 20px;">关闭菜单</button>
+							</p>
+
+						</div>
+						
+					</div>
+				</div>
+			</aside>
+			<div class="mui-inner-wrap">
+				<header class="mui-bar mui-bar-nav">
+					<a class="mui-action-back mui-icon mui-icon-back mui-pull-left"></a>
+					<a id="offCanvasBtn" href="#offCanvasSide" class="mui-icon mui-action-menu mui-icon-bars mui-pull-right"></a>
+					<h1 class="mui-title" id="selectHe">库存查询</h1><span class="mui-number"></span>
+				</header>
+					<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+						<div class="mui-scroll" id="scrollDiv">
+							<div class="data">
+								
+							</div>
+						</div>
+					</div>
+				<!-- off-canvas backdrop -->
+				<div class="mui-off-canvas-backdrop"></div>
+			</div>
+		</div>
+		
+		
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="JQ/jquery-3.1.1.min.js" ></script>
+		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+		<script type="text/javascript" src="JQ/jquery.cookie.js" ></script>
+		<script type="text/javascript" src="js/datajs.js" ></script>
+		<script type="text/javascript" src="js/Side_nav.js" ></script>	
+		<script>
+			
+			
+			
+			
+			
+		</script>
+	</body>
+
+</html>
